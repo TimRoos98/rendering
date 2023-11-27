@@ -1,0 +1,158 @@
+{
+	"info": {
+		"_postman_id": "3f239934-b6ed-4d54-a9c8-6d47e04b9517",
+		"name": "REST_examples",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getLocations",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://local.ingress.nl/restapi/getLocations",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ingress",
+						"nl"
+					],
+					"path": [
+						"restapi",
+						"getLocations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postLocation/location",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "postQD",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"kWhInQuarter\": 0,\n    \"max\": 0,\n    \"min\": 0,\n    \"timeStamp\": 1644080725\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://local.ingress.nl/restapi/postQuarterlyData/wanker23",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ingress",
+						"nl"
+					],
+					"path": [
+						"restapi",
+						"postQuarterlyData",
+						"wanker23"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getQW",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://local.ingress.nl/restapi/getQuarterlykWhWeek/wanker23",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ingress",
+						"nl"
+					],
+					"path": [
+						"restapi",
+						"getQuarterlykWhWeek",
+						"wanker23"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getQD",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "getTD",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "getTW",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "getTM",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "getTT",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "deleteLoc",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		}
+	]
+}

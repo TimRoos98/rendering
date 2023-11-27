@@ -1,0 +1,19 @@
+#all ingress allowed all egress disallowed so deafult deny all is used
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: frontend-policy
+  namespace: mongodbhelm
+  labels:
+    {{- include "common-resources-chart.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - {}
+  egress:
+  - {}

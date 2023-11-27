@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-configmap
+  namespace: mongodbhelm
+  labels:
+    {{- include "common-resources-chart.labels" . | nindent 4 }}
+data:
+  database_url: my-mongodb-svc
+  rest_url: mongo-rest-service
