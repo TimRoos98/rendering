@@ -4,11 +4,10 @@ jobs:
  build:
    runs-on: ubuntu-latest
    steps:
-   - uses: actions/checkout@v2
-   - name: Setup Helm
-     uses: azure/k8s-bake@61041e8c2f75c1f01186c8f05fb8b24e1fc507d8
+   - name: actions/checkout@v2
+     uses: azure/k8s-bake@v2.4
      with:
        renderEngine: 'helm'
-       helmChart: './'
+       helmChart: '.'
        helm-version: 'latest' 
      id: bake
