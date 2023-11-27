@@ -1,0 +1,22 @@
+name: Render Helm Chart and Add to Repository
+on: [push]
+jobs:
+ build:
+   runs-on: ubuntu-latest
+   steps:
+   - uses: actions/checkout@v2
+   - name: Setup Helm
+     uses: azure/k8s-bake@61041e8c2f75c1f01186c8f05fb8b24e1fc507d8
+     with:
+       renderEngine: 'helm'
+       helmChart: './path/to/your/chart'
+       helm-version: 'latest' 
+     id: bake
+   - name: Commit and Push Rendered Manifests
+     run: |
+       echo "${{ steps.bake.outputs.manifestsBundle }}" > ./rendered_manifests.yml
+       git config --local user.email "action@github.com"
+       git config --local user.name "GitHub Action"
+       git add ./rendered_manifests.yml
+       git commit -m "Add rendered manifests"
+       git push
