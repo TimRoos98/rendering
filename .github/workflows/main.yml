@@ -1,13 +1,14 @@
-name: Render Helm Chart and Add to Repository
+name: Render Helm Chart
 on: [push]
 jobs:
  build:
-   runs-on: ubuntu-latest
-   steps:
-   - name: actions/checkout@v2
-     uses: azure/k8s-bake@v2.4
-     with:
-       renderEngine: 'helm'
-       helmChart: '.'
-       helm-version: 'latest' 
-     id: bake
+  runs-on: ubuntu-latest
+  steps:
+  - uses: actions/checkout@v2
+  - name: Setup Helm
+    uses: azure/k8s-bake@v2.4
+    with:
+      renderEngine: 'helm'
+      helmChart: '.'
+      helm-version: 'latest' 
+    id: bake
