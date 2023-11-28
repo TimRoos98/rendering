@@ -21,7 +21,6 @@ jobs:
       echo ${{ secrets.PAT }}
       git config --global user.email "tim.roos.bruijn@gmail.com"
       git config --global user.name "TimRoos98"
-      git remote -v
       git commit -am "Update README" || exit 0
       git push
 
