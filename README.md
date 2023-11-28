@@ -12,3 +12,11 @@ flowchart TD
                         Image: name/docker-image:version`")
     end
 ```
+```mermaid
+flowchart TD
+    user1[fa:fa-user User 1] -- edit --> folder
+```
+```mermaid
+graph LR
+    user1[fa:fa-user User 1] -- edit --> folder
+```
