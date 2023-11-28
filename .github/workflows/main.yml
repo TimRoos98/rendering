@@ -22,8 +22,6 @@ jobs:
       git remote -v
       git remote set-url origin https://TimRoos98:${{ secrets.PAT }}@github.com/TimRoos98/rendering.git
       git remote -v
-      git config --local user.email "tim.roos.bruijn@gmail.com"
-      git config --local user.name "TimRoos98"
       git commit -am "Update README" || exit 0
       git push
 
