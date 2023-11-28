@@ -19,6 +19,7 @@ jobs:
     run: |
       git diff
       echo ${{ secrets.PAT }}
+      git remote -v
       git config --local user.email "tim.roos.bruijn@gmail.com"
       git config --local user.name "TimRoos98"
       git commit -am "Update README" || exit 0
