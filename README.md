@@ -8,7 +8,7 @@ flowchart TD
                         Image: name/docker-image:version`")
         G--tcp 443-->Container-2("`Name: NXING-POD
                         Image: name/docker-image:version`")
-        G--udp 161>Container-3("`Name: NXING-POD
+        G--udp 161-->Container-3("`Name: NXING-POD
                         Image: name/docker-image:version`")
     end
 
