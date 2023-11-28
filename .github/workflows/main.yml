@@ -18,8 +18,8 @@ jobs:
   - name: Commit and push if it changed
     run: |
       git diff
-      git config --local user.email "action@github.com"
-      git config --local user.name "GitHub Action"
+      git config --local user.email "tim.roos.bruijn@gmail.com"
+      git config --local user.name "TimRoos98"
       git commit -am "Update README" || exit 0
       git push https://${{ secrets.PAT }}@github.com/TimRoos98/rendering.git
 
