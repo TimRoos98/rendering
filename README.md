@@ -1,3 +1,4 @@
+```mermaid
 flowchart TD
     B["Outside world"]
     
@@ -26,3 +27,4 @@ flowchart TD
                             &Tab;fa:fa-microchip: String
                             &Tab;fa:fa-memory: String`"]
     end
+```
