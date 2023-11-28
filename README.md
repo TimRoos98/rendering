@@ -4,11 +4,11 @@ flowchart TD
         direction RL
         G{PortMap}
         scalar((1..3))
-        G--http 80-->Container-1("`Name: NXING-POD
+        G--tcp 80-->Container-1("`Name: NXING-POD
                         Image: name/docker-image:version`")
-        G-->Container-2("`Name: NXING-POD
+        G--tcp 443-->Container-2("`Name: NXING-POD
                         Image: name/docker-image:version`")
-        G-->Container-3("`Name: NXING-POD
+        G--udp 161>Container-3("`Name: NXING-POD
                         Image: name/docker-image:version`")
     end
 
