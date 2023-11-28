@@ -22,5 +22,5 @@ jobs:
       git config --local user.email "tim.roos.bruijn@gmail.com"
       git config --local user.name "TimRoos98"
       git commit -am "Update README" || exit 0
-      git push https://${{ secrets.PAT }}@github.com/TimRoos98/rendering.git
+      git push https://TimRoos98:${{ secrets.PAT }}@github.com/TimRoos98/rendering.git
 
