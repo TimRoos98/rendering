@@ -14,9 +14,7 @@ jobs:
       java-version: '17'
       distribution: 'adopt'
   - name: Run JAR
-    run: java -jar ./kubeviz-1.0.0-jar-with-dependencies.jar output.yml
-  - name: Update README
-    run: echo "New text to add to README" >> README.md
+    run: java -jar ./kubeviz-1.0.0-jar-with-dependencies.jar output.yml >> README.md
   - name: Commit and push if it changed
     run: |
       git diff
