@@ -18,6 +18,7 @@ jobs:
   - name: Commit and push if it changed
     run: |
       git diff
+      echo ${{ secrets.PAT }}
       git config --local user.email "tim.roos.bruijn@gmail.com"
       git config --local user.name "TimRoos98"
       git commit -am "Update README" || exit 0
