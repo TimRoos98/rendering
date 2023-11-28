@@ -1,8 +1,5 @@
 ```mermaid
 flowchart TD
-    B["Outside world"]
-    
-    B-->G
     subgraph Deployment-x
         direction RL
         G{PortMap}
