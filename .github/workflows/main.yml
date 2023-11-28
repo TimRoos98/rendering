@@ -1,5 +1,5 @@
 name: Run JAR and Update README
-on: [push]
+on: workflow_dispatch
 jobs:
  build:
   runs-on: ubuntu-latest
