@@ -1,17 +1,37 @@
 ```mermaid
 flowchart TD
-    subgraph Deployment-x
-        direction RL
-        G{PortMap}
-        scalar((1..3))
-        G--tcp 80-->Container-1("`Name: NXING-POD
-                        Image: name/docker-image:version`")
-        G--tcp 443-->Container-2("`Name: NXING-POD
-                        Image: name/docker-image:version`")
-        G--udp 161-->Container-3("`Name: NXING-POD
-                        Image: name/docker-image:version`")
-    end
-
+subgraph my-app-deployment
+subgraph my-app-deployment-pod-0
+my-app-deployment-pod-0-proxy{kube-proxy}
+style my-app-deployment-pod-0-proxy fill:#cf2f77,color:#ffffff
+my-app-deployment-pod-0-proxy<--TCP: 8080-->my-app-deployment-pod-0-my-app-container("Name:my-app-container
+Image:my-app-image:tag
+Resources: (request/limits)
+cpu: 100m/500m
+memory: 200Mi/500Mi")
+style my-app-deployment-pod-0-my-app-container fill:#cf2f77,color:#ffffff
+end
+subgraph my-app-deployment-pod-1
+my-app-deployment-pod-1-proxy{kube-proxy}
+style my-app-deployment-pod-1-proxy fill:#cf2f77,color:#ffffff
+my-app-deployment-pod-1-proxy<--TCP: 8080-->my-app-deployment-pod-1-my-app-container("Name:my-app-container
+Image:my-app-image:tag
+Resources: (request/limits)
+cpu: 100m/500m
+memory: 200Mi/500Mi")
+style my-app-deployment-pod-1-my-app-container fill:#cf2f77,color:#ffffff
+end
+subgraph my-app-deployment-pod-2
+my-app-deployment-pod-2-proxy{kube-proxy}
+style my-app-deployment-pod-2-proxy fill:#cf2f77,color:#ffffff
+my-app-deployment-pod-2-proxy<--TCP: 8080-->my-app-deployment-pod-2-my-app-container("Name:my-app-container
+Image:my-app-image:tag
+Resources: (request/limits)
+cpu: 100m/500m
+memory: 200Mi/500Mi")
+style my-app-deployment-pod-2-my-app-container fill:#cf2f77,color:#ffffff
+end
+end
 ```
 ```mermaid
 flowchart TD
