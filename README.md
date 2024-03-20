@@ -1,40 +1,6 @@
 ```mermaid
-flowchart TD
-subgraph my-app-deployment
-subgraph my-app-deployment-pod-0
-style my-app-deployment-pod-0 fill:#0461cf,color:#ffffff
-my-app-deployment-pod-0-proxy{kube-proxy}
-style my-app-deployment-pod-0-proxy fill:#cf2f77,color:#ffffff
-my-app-deployment-pod-0-proxy<--TCP: 8080-->my-app-deployment-pod-0-my-app-container("Name:my-app-container
-Image:my-app-image:tag
-Resources: (request/limits)
-cpu: 100m/500m
-memory: 200Mi/500Mi")
-style my-app-deployment-pod-0-my-app-container fill:#cf2f77,color:#ffffff
-end
-subgraph my-app-deployment-pod-1
-style my-app-deployment-pod-1 fill:#0461cf,color:#ffffff
-my-app-deployment-pod-1-proxy{kube-proxy}
-style my-app-deployment-pod-1-proxy fill:#cf2f77,color:#ffffff
-my-app-deployment-pod-1-proxy<--TCP: 8080-->my-app-deployment-pod-1-my-app-container("Name:my-app-container
-Image:my-app-image:tag
-Resources: (request/limits)
-cpu: 100m/500m
-memory: 200Mi/500Mi")
-style my-app-deployment-pod-1-my-app-container fill:#cf2f77,color:#ffffff
-end
-subgraph my-app-deployment-pod-2
-style my-app-deployment-pod-2 fill:#0461cf,color:#ffffff
-my-app-deployment-pod-2-proxy{kube-proxy}
-style my-app-deployment-pod-2-proxy fill:#cf2f77,color:#ffffff
-my-app-deployment-pod-2-proxy<--TCP: 8080-->my-app-deployment-pod-2-my-app-container("Name:my-app-container
-Image:my-app-image:tag
-Resources: (request/limits)
-cpu: 100m/500m
-memory: 200Mi/500Mi")
-style my-app-deployment-pod-2-my-app-container fill:#cf2f77,color:#ffffff
-end
-end
+flowchart LR
+    A["<span style='color: blue;'>A double</span> quote:#quot;"] --> B["A dec char:#9829;"]
 ```
 ```mermaid
 flowchart TD
