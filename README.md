@@ -1,5 +1,6 @@
-```mermaid
-flowchart
+```
+mermaid
+flowchart TD
 subgraph Legend
     direction LR
 
@@ -433,7 +434,8 @@ my-pihole-pod-1-proxy --TCP-8080 UDP-53 --> my-pihole-web
 my-pihole-smoke-test-proxy --TCP-8080 UDP-53 --> my-pihole-web
 classDef DELETED stroke:#f00
 classDef NEW stroke:#0f0
-classDef UPDATED stroke:#00f```
+classDef UPDATED stroke:#00f
+```
 ```mermaid
 flowchart TD
     user1[fa:fa-user User 1] -- edit --> folder
