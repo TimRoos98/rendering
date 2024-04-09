@@ -1,5 +1,4 @@
-```
-mermaid
+```mermaid
 flowchart TD
 subgraph Legend
     direction LR
