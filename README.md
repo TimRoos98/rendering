@@ -32,9 +32,12 @@ subgraph Legend
     end    
     Stadium([ Service ])
       
-    end
+DELETED[ Deleted Resource ]:::DELETED
+    NEW[ New Resource ]:::NEW
+    Updated[ Updated Resource 
+    Value: <span style='color: red;'>Old Value</span> <span style='color: green;'>New Value</span>]:::UPDATED
+    EQUAL[ Unchanged Resource ]
 external["External Network"]
-
 external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
 external --nodeIP:UDP-Dynamic 30000-32767 TCP-Dynamic 30000-32767 --> my-pihole-dns-udp
 external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
@@ -43,61 +46,149 @@ external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
 external --nodeIP:UDP-Dynamic 30000-32767 TCP-Dynamic 30000-32767 --> my-pihole-dns-udp
 external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
 external --nodeIP:UDP-Dynamic 30000-32767 TCP-Dynamic 30000-32767 --> my-pihole-dns-udp
-my-pihole-pod-0-proxy --UDP-68 --> my-pihole-dhcp
-my-pihole-pod-1-proxy --UDP-68 --> my-pihole-dhcp
-my-pihole-smoke-test-proxy --UDP-68 --> my-pihole-dhcp
-my-pihole-pod-0-proxy --UDP-53 TCP-54 --> my-pihole-dns-udp
-my-pihole-pod-1-proxy --UDP-53 TCP-54 --> my-pihole-dns-udp
-my-pihole-smoke-test-proxy --UDP-53 TCP-54 --> my-pihole-dns-udp
-my-pihole-pod-0-proxy --TCP-8080 UDP-53 --> my-pihole-web
-my-pihole-pod-1-proxy --TCP-8080 UDP-53 --> my-pihole-web
-my-pihole-smoke-test-proxy --TCP-8080 UDP-53 --> my-pihole-web
+external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
+external --nodeIP:UDP-Dynamic 30000-32767 TCP-Dynamic 30000-32767 --> my-pihole-dns-udp
+subgraph KubernetesAPI [KubernetesAPI]
+my-pihole-password[/
+Name: my-pihole-password
+Labels:
+app: pihole
+heritage: Helm
+<span style='color: orange;'>release: my-piholeV2
+</span><span style='color: green;'>updated: true
+</span><span style='color: red;'>chart: pihole-2.22.0
+</span>Data:
+<span style='color: orange;'>password: NewPassword=
+</span>/]:::UPDATED
+my-pihole-password[/
+Name: my-pihole-password
+Labels:
+app: pihole
+heritage: Helm
+<span style='color: orange;'>release: my-piholeV2
+</span><span style='color: green;'>updated: true
+</span><span style='color: red;'>chart: pihole-2.22.0
+</span>Data:
+<span style='color: orange;'>password: NewPassword=
+</span>/]:::UPDATED
+my-pihole-password[/
+Name: my-pihole-password
+Labels:
+app: pihole
+heritage: Helm
+<span style='color: orange;'>release: my-piholeV2
+</span><span style='color: green;'>updated: true
+</span><span style='color: red;'>chart: pihole-2.22.0
+</span>Data:
+<span style='color: orange;'>password: NewPassword=
+</span>/]:::UPDATED
+my-pihole-password[/
+Name: my-pihole-password
+Labels:
+app: pihole
+heritage: Helm
+<span style='color: orange;'>release: my-piholeV2
+</span><span style='color: green;'>updated: true
+</span><span style='color: red;'>chart: pihole-2.22.0
+</span>Data:
+<span style='color: orange;'>password: NewPassword=
+</span>/]:::UPDATED
+my-pihole-password[/
+Name: my-pihole-password
+Labels:
+app: pihole
+heritage: Helm
+<span style='color: orange;'>release: my-piholeV2
+</span><span style='color: green;'>updated: true
+</span><span style='color: red;'>chart: pihole-2.22.0
+</span>Data:
+<span style='color: orange;'>password: NewPassword=
+</span>/]:::UPDATED
+my-pihole-custom-dnsmasq[\
+Name: my-pihole-custom-dnsmasq
+Labels:
+app: pihole
+chart: pihole-2.22.0
+heritage: Helm
+<span style='color: orange;'>release: my-piholeV2
+</span>\]:::UPDATED
+my-pihole-custom-dnsmasq[\
+Name: my-pihole-custom-dnsmasq
+Labels:
+app: pihole
+chart: pihole-2.22.0
+heritage: Helm
+<span style='color: orange;'>release: my-piholeV2
+</span>\]:::UPDATED
+my-pihole-custom-dnsmasq[\
+Name: my-pihole-custom-dnsmasq
+Labels:
+app: pihole
+chart: pihole-2.22.0
+heritage: Helm
+<span style='color: orange;'>release: my-piholeV2
+</span>\]:::UPDATED
+my-pihole-custom-dnsmasq[\
+Name: my-pihole-custom-dnsmasq
+Labels:
+app: pihole
+chart: pihole-2.22.0
+heritage: Helm
+<span style='color: orange;'>release: my-piholeV2
+</span>\]:::UPDATED
+my-pihole-custom-dnsmasq[\
+Name: my-pihole-custom-dnsmasq
+Labels:
+app: pihole
+chart: pihole-2.22.0
+heritage: Helm
+<span style='color: orange;'>release: my-piholeV2
+</span>\]:::UPDATED
+end
+KubernetesAPI:::UPDATED
 subgraph my-pihole-smoke-test [Pod: my-pihole-smoke-test
 ]
 direction BT
 subgraph config-my-pihole-smoke-test [CONFIG:
-Restart Policy: OnFailure
-Termination Grace Period: 20S
+RestartPolicy: <span style='color: red;'>Never</span> <span style='color: green;'>OnFailure</span>
+Termination Grace Period: <span style='color: red;'>0</span> <span style='color: green;'>20</span>
 ]
 end
+config-my-pihole-smoke-test:::UPDATED
 my-pihole-smoke-test-hook1-container(
 hook1-container
-Image: curlimages/curlV2
-Env: 
-Commands: sh, curl http://my-pihole-web:80/, somethingTestV2
-Image Pull Policy: Always
-)
-my-pihole-smoke-test-proxy{"Proxy"}
+Image: <span style='color: red;'>curlimages/curl</span> <span style='color: green;'>curlimages/curlV2</span>
+Commands: sh, <span style='color: red;'>-c</span>, curl http://my-pihole-web:80/, <span style='color: green;'>somethingTestV2</span>
+ImagePullPolicy: <span style='color: red;'>IfNotPresent</span> <span style='color: green;'>Always</span>
+):::UPDATED
+my-pihole-smoke-test-proxy{"Ingress
+Egress
+"}
 my-pihole-smoke-test-hook1-container --> my-pihole-smoke-test-proxy
 end
+my-pihole-smoke-test:::UPDATED
 subgraph my-pihole [Deployment: my-pihole]
 subgraph my-pihole-config [Config:
-Strategy: Recreate
-Config:
-maxSurge: 1
-maxUnavailable: 1
-
+StrategyType: <span style='color: red;'>RollingUpdate</span> <span style='color: green;'>Recreate</span>
 ]
 end
 subgraph my-pihole-pod-0 [Pod: my-pihole-pod-0
 ]
 direction BT
 subgraph config-my-pihole-pod-0 [CONFIG:
-Restart Policy: Always
-Termination Grace Period: 30S
+NameServers: <span style='color: red;'>127.0.0.1</span>, <span style='color: green;'>0.0.0.0</span>, 8.8.8.8
 ]
 end
-my-pihole-pod-0-pihole(
+config-my-pihole-pod-0:::UPDATED
+pod-0-pihole(
 pihole
-Image: pihole/pihole:2024.02.0
-Env: WEB_PORT: 80
-VIRTUAL_HOST: pi.hole
-WEBPASSWORD: my-pihole-password/password
-PIHOLE_DNS_: 8.8.8.8;8.8.4.4
-
-Image Pull Policy: IfNotPresent
-)
-my-pihole-pod-0-proxy{"Proxy"}
+Resources: &#40request/limits&#41
+CPU: Default/<span style='color: red;'>Default</span>,<span style='color: green;'>1Gi</span>
+Memory: <span style='color: red;'>Default</span>,<span style='color: green;'>500m</span>/<span style='color: red;'>Default</span>,<span style='color: green;'>1100m</span>
+):::UPDATED
+my-pihole-pod-0-proxy{"Ingress
+Egress
+"}
 my-pihole-pod-0-pihole <--http: 80
 dns: 53
 dns-udp: 53
@@ -107,35 +198,35 @@ readinessProbe: HTTP GET /admin/index.php:http
 livenessProbe: HTTP GET /admin/index.php:http
 -->my-pihole-pod-0-proxy
 my-pihole-pod-0-config[("config
-type: emptyDir")]
+Type: EmptyDir
+")]
 my-pihole-pod-0-custom-dnsmasq[("custom-dnsmasq
-type: configMapdefaultMode: 420
-name: my-pihole-custom-dnsmasq")]
-my-pihole-pod-0-config <-. "/etc/pihole" .-> my-pihole-pod-0-pihole
+Type: ConfigMap
+")]
+my-pihole-pod-0-config <-.-> my-pihole-pod-0-pihole
 
-my-pihole-pod-0-custom-dnsmasq <-. "/etc/dnsmasq.d/02-custom.conf" .-> my-pihole-pod-0-pihole
+my-pihole-pod-0-custom-dnsmasq <-.-> my-pihole-pod-0-pihole
 
-my-pihole-pod-0-custom-dnsmasq <-. "/etc/addn-hosts" .-> my-pihole-pod-0-pihole
+my-pihole-pod-0-custom-dnsmasq <-.-> my-pihole-pod-0-pihole
 end
+my-pihole-pod-0:::UPDATED
 subgraph my-pihole-pod-1 [Pod: my-pihole-pod-1
 ]
 direction BT
 subgraph config-my-pihole-pod-1 [CONFIG:
-Restart Policy: Always
-Termination Grace Period: 30S
+NameServers: <span style='color: red;'>127.0.0.1</span>, <span style='color: green;'>0.0.0.0</span>, 8.8.8.8
 ]
 end
-my-pihole-pod-1-pihole(
+config-my-pihole-pod-1:::UPDATED
+pod-1-pihole(
 pihole
-Image: pihole/pihole:2024.02.0
-Env: WEB_PORT: 80
-VIRTUAL_HOST: pi.hole
-WEBPASSWORD: my-pihole-password/password
-PIHOLE_DNS_: 8.8.8.8;8.8.4.4
-
-Image Pull Policy: IfNotPresent
-)
-my-pihole-pod-1-proxy{"Proxy"}
+Resources: &#40request/limits&#41
+CPU: Default/<span style='color: red;'>Default</span>,<span style='color: green;'>1Gi</span>
+Memory: <span style='color: red;'>Default</span>,<span style='color: green;'>500m</span>/<span style='color: red;'>Default</span>,<span style='color: green;'>1100m</span>
+):::UPDATED
+my-pihole-pod-1-proxy{"Ingress
+Egress
+"}
 my-pihole-pod-1-pihole <--http: 80
 dns: 53
 dns-udp: 53
@@ -145,28 +236,38 @@ readinessProbe: HTTP GET /admin/index.php:http
 livenessProbe: HTTP GET /admin/index.php:http
 -->my-pihole-pod-1-proxy
 my-pihole-pod-1-config[("config
-type: emptyDir")]
+Type: EmptyDir
+")]
 my-pihole-pod-1-custom-dnsmasq[("custom-dnsmasq
-type: configMapdefaultMode: 420
-name: my-pihole-custom-dnsmasq")]
-my-pihole-pod-1-config <-. "/etc/pihole" .-> my-pihole-pod-1-pihole
+Type: ConfigMap
+")]
+my-pihole-pod-1-config <-.-> my-pihole-pod-1-pihole
 
-my-pihole-pod-1-custom-dnsmasq <-. "/etc/dnsmasq.d/02-custom.conf" .-> my-pihole-pod-1-pihole
+my-pihole-pod-1-custom-dnsmasq <-.-> my-pihole-pod-1-pihole
 
-my-pihole-pod-1-custom-dnsmasq <-. "/etc/addn-hosts" .-> my-pihole-pod-1-pihole
+my-pihole-pod-1-custom-dnsmasq <-.-> my-pihole-pod-1-pihole
 end
+my-pihole-pod-1:::UPDATED
 end
+my-pihole:::UPDATED
 my-pihole-dhcp([
 Service Type: NodePort
-name: my-pihole-dhcp
-labels:
-app: pihole
-chart: pihole-2.22.0
-release: my-pihole
-heritage: Helm
-UDP:
-Dynamic 30000-32767,68:client-udp
-])
+Name: my-pihole-dhcp
+PortMapping:
+UDP: <span style='color: red;'>Dynamic 30000-32767,67:client-udp
+</span>, <span style='color: green;'>Dynamic 30000-32767,68:client-udp
+</span>
+]):::UPDATED
+my-pihole-dhcp --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-0-proxy
+my-pihole-dhcp --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-1-proxy
 my-pihole-dhcp --http: 80
 dns: 53
 dns-udp: 53
@@ -209,17 +310,23 @@ https: 443
 client-udp: 67--> my-pihole-pod-1-proxy
 my-pihole-dns-udp([
 Service Type: NodePort
-name: my-pihole-dns-udp
-labels:
-app: pihole
-chart: pihole-2.22.0
-release: my-pihole
-heritage: Helm
-UDP:
-Dynamic 30000-32767,53:dns-udp
-TCP:
-Dynamic 30000-32767,54:54
-])
+Name: my-pihole-dns-udp
+PortMapping:
+UDP: Dynamic 30000-32767,53:dns-udp
+
+<span style='color: green;'>TCP: Dynamic 30000-32767,54:54
+
+</span>]):::UPDATED
+my-pihole-dns-udp --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-0-proxy
+my-pihole-dns-udp --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-1-proxy
 my-pihole-dns-udp --http: 80
 dns: 53
 dns-udp: 53
@@ -262,155 +369,74 @@ https: 443
 client-udp: 67--> my-pihole-pod-1-proxy
 my-pihole-web([
 Service Type: ClusterIP
-name: my-pihole-web
-labels:
-app: pihole
-chart: pihole-2.22.0
-release: my-pihole
-heritage: Helm
-TCP:
-8080:http
-UDP:
-53:dns-udp
-])
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-subgraph KubernetesAPI [KubernetesAPI
-]
-my-pihole-password[/
-name: my-pihole-password
-labels:
-app: pihole
-heritage: Helm
-release: my-piholeV2
-updated: true
-Data:
-password: NewPassword=
-type: Opaque
-/]
-my-pihole-password[/
-name: my-pihole-password
-labels:
-app: pihole
-heritage: Helm
-release: my-piholeV2
-updated: true
-Data:
-password: NewPassword=
-type: Opaque
-/]
-my-pihole-password[/
-name: my-pihole-password
-labels:
-app: pihole
-heritage: Helm
-release: my-piholeV2
-updated: true
-Data:
-password: NewPassword=
-type: Opaque
-/]
-my-pihole-password[/
-name: my-pihole-password
-labels:
-app: pihole
-heritage: Helm
-release: my-piholeV2
-updated: true
-Data:
-password: NewPassword=
-type: Opaque
-/]
-my-pihole-custom-dnsmasq[\
-name: my-pihole-custom-dnsmasq
-labels:
-app: pihole
-chart: pihole-2.22.0
-release: my-piholeV2
-heritage: Helm
-data:
-02-custom.conf: addn-hosts=/etc/addn-hosts
-addn-hosts: 
-05-pihole-custom-cname.conf: 
-immutable: false
-\]
-my-pihole-custom-dnsmasq[\
-name: my-pihole-custom-dnsmasq
-labels:
-app: pihole
-chart: pihole-2.22.0
-release: my-piholeV2
-heritage: Helm
-data:
-02-custom.conf: addn-hosts=/etc/addn-hosts
-addn-hosts: 
-05-pihole-custom-cname.conf: 
-immutable: false
-\]
-my-pihole-custom-dnsmasq[\
-name: my-pihole-custom-dnsmasq
-labels:
-app: pihole
-chart: pihole-2.22.0
-release: my-piholeV2
-heritage: Helm
-data:
-02-custom.conf: addn-hosts=/etc/addn-hosts
-addn-hosts: 
-05-pihole-custom-cname.conf: 
-immutable: false
-\]
-my-pihole-custom-dnsmasq[\
-name: my-pihole-custom-dnsmasq
-labels:
-app: pihole
-chart: pihole-2.22.0
-release: my-piholeV2
-heritage: Helm
-data:
-02-custom.conf: addn-hosts=/etc/addn-hosts
-addn-hosts: 
-05-pihole-custom-cname.conf: 
-immutable: false
-\]
-end
+Name: my-pihole-web
+PortMapping:
+TCP: <span style='color: red;'>80:http
+</span>, <span style='color: red;'>443:https
+</span>, <span style='color: green;'>8080:http
+</span>
+<span style='color: green;'>UDP: 53:dns-udp
 
-```
+</span>]):::UPDATED
+my-pihole-web --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-0-proxy
+my-pihole-web --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-1-proxy
+my-pihole-web --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-0-proxy
+my-pihole-web --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-1-proxy
+my-pihole-web --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-0-proxy
+my-pihole-web --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-1-proxy
+my-pihole-web --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-0-proxy
+my-pihole-web --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-1-proxy
+my-pihole-web --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-0-proxy
+my-pihole-web --http: 80
+dns: 53
+dns-udp: 53
+https: 443
+client-udp: 67--> my-pihole-pod-1-proxy
+my-pihole-pod-0-proxy --UDP-68 --> my-pihole-dhcp
+my-pihole-pod-1-proxy --UDP-68 --> my-pihole-dhcp
+my-pihole-smoke-test-proxy --UDP-68 --> my-pihole-dhcp
+my-pihole-pod-0-proxy --UDP-53 TCP-54 --> my-pihole-dns-udp
+my-pihole-pod-1-proxy --UDP-53 TCP-54 --> my-pihole-dns-udp
+my-pihole-smoke-test-proxy --UDP-53 TCP-54 --> my-pihole-dns-udp
+my-pihole-pod-0-proxy --TCP-8080 UDP-53 --> my-pihole-web
+my-pihole-pod-1-proxy --TCP-8080 UDP-53 --> my-pihole-web
+my-pihole-smoke-test-proxy --TCP-8080 UDP-53 --> my-pihole-web
+classDef DELETED stroke:#f00
+classDef NEW stroke:#0f0
+classDef UPDATED stroke:#00f```
