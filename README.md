@@ -41,14 +41,6 @@ DELETED[ Deleted Resource ]:::DELETED
 external["External Network"]
 external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
 external --nodeIP:UDP-Dynamic 30000-32767 TCP-Dynamic 30000-32767 --> my-pihole-dns-udp
-external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
-external --nodeIP:UDP-Dynamic 30000-32767 TCP-Dynamic 30000-32767 --> my-pihole-dns-udp
-external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
-external --nodeIP:UDP-Dynamic 30000-32767 TCP-Dynamic 30000-32767 --> my-pihole-dns-udp
-external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
-external --nodeIP:UDP-Dynamic 30000-32767 TCP-Dynamic 30000-32767 --> my-pihole-dns-udp
-external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
-external --nodeIP:UDP-Dynamic 30000-32767 TCP-Dynamic 30000-32767 --> my-pihole-dns-udp
 subgraph KubernetesAPI [KubernetesAPI]
 my-pihole-password[/
 Name: my-pihole-password
@@ -61,82 +53,6 @@ heritage: Helm
 </span>Data:
 <span style='color: orange;'>password: NewPassword=
 </span>/]:::UPDATED
-my-pihole-password[/
-Name: my-pihole-password
-Labels:
-app: pihole
-heritage: Helm
-<span style='color: orange;'>release: my-piholeV2
-</span><span style='color: green;'>updated: true
-</span><span style='color: red;'>chart: pihole-2.22.0
-</span>Data:
-<span style='color: orange;'>password: NewPassword=
-</span>/]:::UPDATED
-my-pihole-password[/
-Name: my-pihole-password
-Labels:
-app: pihole
-heritage: Helm
-<span style='color: orange;'>release: my-piholeV2
-</span><span style='color: green;'>updated: true
-</span><span style='color: red;'>chart: pihole-2.22.0
-</span>Data:
-<span style='color: orange;'>password: NewPassword=
-</span>/]:::UPDATED
-my-pihole-password[/
-Name: my-pihole-password
-Labels:
-app: pihole
-heritage: Helm
-<span style='color: orange;'>release: my-piholeV2
-</span><span style='color: green;'>updated: true
-</span><span style='color: red;'>chart: pihole-2.22.0
-</span>Data:
-<span style='color: orange;'>password: NewPassword=
-</span>/]:::UPDATED
-my-pihole-password[/
-Name: my-pihole-password
-Labels:
-app: pihole
-heritage: Helm
-<span style='color: orange;'>release: my-piholeV2
-</span><span style='color: green;'>updated: true
-</span><span style='color: red;'>chart: pihole-2.22.0
-</span>Data:
-<span style='color: orange;'>password: NewPassword=
-</span>/]:::UPDATED
-my-pihole-custom-dnsmasq[\
-Name: my-pihole-custom-dnsmasq
-Labels:
-app: pihole
-chart: pihole-2.22.0
-heritage: Helm
-<span style='color: orange;'>release: my-piholeV2
-</span>\]:::UPDATED
-my-pihole-custom-dnsmasq[\
-Name: my-pihole-custom-dnsmasq
-Labels:
-app: pihole
-chart: pihole-2.22.0
-heritage: Helm
-<span style='color: orange;'>release: my-piholeV2
-</span>\]:::UPDATED
-my-pihole-custom-dnsmasq[\
-Name: my-pihole-custom-dnsmasq
-Labels:
-app: pihole
-chart: pihole-2.22.0
-heritage: Helm
-<span style='color: orange;'>release: my-piholeV2
-</span>\]:::UPDATED
-my-pihole-custom-dnsmasq[\
-Name: my-pihole-custom-dnsmasq
-Labels:
-app: pihole
-chart: pihole-2.22.0
-heritage: Helm
-<span style='color: orange;'>release: my-piholeV2
-</span>\]:::UPDATED
 my-pihole-custom-dnsmasq[\
 Name: my-pihole-custom-dnsmasq
 Labels:
