@@ -32,7 +32,9 @@ subgraph Legend
     end    
     Stadium([ Service ])
       
-    endexternal["External Network"]
+    end
+external["External Network"]
+
 external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
 external --nodeIP:UDP-Dynamic 30000-32767 TCP-Dynamic 30000-32767 --> my-pihole-dns-udp
 external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
@@ -410,4 +412,5 @@ addn-hosts:
 immutable: false
 \]
 end
+
 ```
