@@ -1,5 +1,4 @@
 ```mermaid
-
 flowchart
 subgraph Legend
     direction LR
@@ -10,7 +9,7 @@ subgraph Legend
     start2[ ] -.->|Storage Flow| stop2[ ]
     style start2 height:0px;
     style stop2 height:0px; 
-    subgraph KubernetesAPI
+    subgraph KubernetesAPILegend
         direction LR
         ParallelogramAlt[\ ConfigMap \]
         Parallelogram[/ Secret /]
@@ -270,46 +269,6 @@ dns: 53
 dns-udp: 53
 https: 443
 client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-dhcp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-dhcp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-dhcp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-dhcp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-dhcp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-dhcp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-dhcp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-dhcp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
 my-pihole-dns-udp([
 Service Type: NodePort
 Name: my-pihole-dns-udp
@@ -319,46 +278,6 @@ UDP: Dynamic 30000-32767,53:dns-udp
 <span style='color: green;'>TCP: Dynamic 30000-32767,54:54
 
 </span>]):::UPDATED
-my-pihole-dns-udp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-dns-udp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-dns-udp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-dns-udp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-dns-udp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-dns-udp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-dns-udp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-dns-udp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
 my-pihole-dns-udp --http: 80
 dns: 53
 dns-udp: 53
@@ -390,46 +309,6 @@ dns: 53
 dns-udp: 53
 https: 443
 client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
 my-pihole-pod-0-proxy --UDP-68 --> my-pihole-dhcp
 my-pihole-pod-1-proxy --UDP-68 --> my-pihole-dhcp
 my-pihole-smoke-test-proxy --UDP-68 --> my-pihole-dhcp
@@ -441,5 +320,4 @@ my-pihole-pod-1-proxy --TCP-8080 UDP-53 --> my-pihole-web
 my-pihole-smoke-test-proxy --TCP-8080 UDP-53 --> my-pihole-web
 classDef DELETED stroke:#f00
 classDef NEW stroke:#0f0
-classDef UPDATED stroke:#00f
-```
+classDef UPDATED stroke:#00f```
