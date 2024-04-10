@@ -15,6 +15,8 @@ jobs:
           distribution: 'adopt'
       - name: Run JAR
         run: java -jar ./kubeviz-1.0.0-jar-with-dependencies.jar github pihole.yml
+      - name: Add all new files
+        run: git add .
       - name: Commit and push if it changed
         run: |
           git diff
