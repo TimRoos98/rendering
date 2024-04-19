@@ -9,17 +9,15 @@ subgraph Legend
     start2[ ] -.->|Storage Flow| stop2[ ]
     style start2 height:0px;
     style stop2 height:0px; 
+    externalLegend[["External Network"]]
     subgraph KubernetesAPILegend
         direction LR
-        ParallelogramAlt[\ ConfigMap \]
         Parallelogram[/ Secret /]
     end
     subgraph Deployment
         direction LR
-        subgraph DeploymentConfig[Deployment Specific Config]
+        subgraph rootConfig[Deployment Specific Config]
         end
-        Proxy2{Ingress
-         Egress}
         subgraph Pod
         direction LR
         subgraph PodConfig[Pod Specific Config]
@@ -29,31 +27,28 @@ subgraph Legend
         Container(Container)
         Storage[( Storage )]
         end
-    end    
-    Stadium([ Service ])
-      
     end
-external["External Network"]
-external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
-external --nodeIP:UDP-Dynamic 30000-32767 TCP-Dynamic 30000-32767 --> my-pihole-dns-udp
-my-pihole-pod-0-proxy --UDP-68 --> my-pihole-dhcp
-my-pihole-pod-1-proxy --UDP-68 --> my-pihole-dhcp
-my-pihole-smoke-test-proxy --UDP-68 --> my-pihole-dhcp
-my-pihole-pod-0-proxy --UDP-53 TCP-54 --> my-pihole-dns-udp
-my-pihole-pod-1-proxy --UDP-53 TCP-54 --> my-pihole-dns-udp
-my-pihole-smoke-test-proxy --UDP-53 TCP-54 --> my-pihole-dns-udp
-my-pihole-pod-0-proxy --TCP-8080 UDP-53 --> my-pihole-web
-my-pihole-pod-1-proxy --TCP-8080 UDP-53 --> my-pihole-web
-my-pihole-smoke-test-proxy --TCP-8080 UDP-53 --> my-pihole-web
+    Stadium([ Service ])
+    end
+external[["External Network"]]
+external --> my-pihole-dhcp-service
+external --> my-pihole-dns-udp-service
+my-pihole-smoke-test-proxy --> my-pihole-dhcp-service
+my-pihole-old-blablabla-proxy --> my-pihole-dhcp-service
+my-pihole-smoke-test-proxy --> my-pihole-dns-udp-service
+my-pihole-old-blablabla-proxy --> my-pihole-dns-udp-service
+my-pihole-smoke-test-proxy --> my-pihole-web-service
+my-pihole-old-blablabla-proxy --> my-pihole-web-service
 subgraph my-pihole-smoke-test [Pod: my-pihole-smoke-test
 ]
 direction BT
 subgraph config-my-pihole-smoke-test [CONFIG:
+name: my-pihole-smoke-test
 ]
 end
 my-pihole-smoke-test-hook1-container(
 hook1-container
-Image: curlimages/curlV2
+Image: curlimages/curlv2
 Resources: &#40request/limits&#41
 cpu: Default/Default
 memory: Default/Default)
@@ -62,37 +57,52 @@ Egress
 "}
 my-pihole-smoke-test-hook1-container --> my-pihole-smoke-test-proxy
 end
+subgraph my-pihole-old-blablabla [Pod: my-pihole-old-blablabla
+]
+direction BT
+subgraph config-my-pihole-old-blablabla [CONFIG:
+name: my-pihole-old-blablabla
+]
+end
+my-pihole-old-blablabla-hook1-container(
+hook1-container
+Image: curlimages/curlv2
+Resources: &#40request/limits&#41
+cpu: Default/Default
+memory: Default/Default)
+my-pihole-old-blablabla-proxy{"Ingress
+Egress
+"}
+my-pihole-old-blablabla-hook1-container --> my-pihole-old-blablabla-proxy
+end
 subgraph my-pihole [Deployment: my-pihole]
 subgraph my-pihole-config [Config:
+name: my-pihole
 ]
 end
 subgraph my-pihole-pod-0 [Pod: my-pihole-pod-0
 ]
 direction BT
 subgraph config-my-pihole-pod-0 [CONFIG:
+name: pod-0
 ]
 end
 my-pihole-pod-0-pihole(
 pihole
 Image: pihole/pihole:2024.02.0
 Resources: &#40request/limits&#41
-cpu: 500m/1100m
-memory: Default/1Gi)
+cpu: Default/Default
+memory: Default/Default)
 my-pihole-pod-0-proxy{"Ingress
 Egress
 "}
-my-pihole-pod-0-pihole <--http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67
-readinessProbe: HTTP GET /admin/index.php:http
-livenessProbe: HTTP GET /admin/index.php:http
--->my-pihole-pod-0-proxy
+my-pihole-pod-0-pihole <-->my-pihole-pod-0-proxy
 my-pihole-pod-0-config[("config
-type: emptyDir")]
+type: emptyDir
+")]
 my-pihole-pod-0-custom-dnsmasq[("custom-dnsmasq
-type: configMapdefaultMode: 420
+type: configMap
+defaultMode: 420
 name: my-pihole-custom-dnsmasq")]
 my-pihole-pod-0-config <-. "/etc/pihole" .-> my-pihole-pod-0-pihole
 
@@ -104,29 +114,25 @@ subgraph my-pihole-pod-1 [Pod: my-pihole-pod-1
 ]
 direction BT
 subgraph config-my-pihole-pod-1 [CONFIG:
+name: pod-1
 ]
 end
 my-pihole-pod-1-pihole(
 pihole
 Image: pihole/pihole:2024.02.0
 Resources: &#40request/limits&#41
-cpu: 500m/1100m
-memory: Default/1Gi)
+cpu: Default/Default
+memory: Default/Default)
 my-pihole-pod-1-proxy{"Ingress
 Egress
 "}
-my-pihole-pod-1-pihole <--http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67
-readinessProbe: HTTP GET /admin/index.php:http
-livenessProbe: HTTP GET /admin/index.php:http
--->my-pihole-pod-1-proxy
+my-pihole-pod-1-pihole <-->my-pihole-pod-1-proxy
 my-pihole-pod-1-config[("config
-type: emptyDir")]
+type: emptyDir
+")]
 my-pihole-pod-1-custom-dnsmasq[("custom-dnsmasq
-type: configMapdefaultMode: 420
+type: configMap
+defaultMode: 420
 name: my-pihole-custom-dnsmasq")]
 my-pihole-pod-1-config <-. "/etc/pihole" .-> my-pihole-pod-1-pihole
 
@@ -135,98 +141,33 @@ my-pihole-pod-1-custom-dnsmasq <-. "/etc/dnsmasq.d/02-custom.conf" .-> my-pihole
 my-pihole-pod-1-custom-dnsmasq <-. "/etc/addn-hosts" .-> my-pihole-pod-1-pihole
 end
 end
-my-pihole-dhcp([
+my-pihole-dhcp-service([
 Service Type: NodePort
 name: my-pihole-dhcp
-labels:
-app: pihole
-chart: pihole-2.22.0
-release: my-pihole
-heritage: Helm
-UDP:
-Dynamic 30000-32767,68:client-udp
 ])
-my-pihole-dhcp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-dhcp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-dns-udp([
+my-pihole-dhcp-service <-->my-pihole-pod-0-proxy
+my-pihole-dhcp-service <-->my-pihole-pod-1-proxy
+my-pihole-dns-udp-service([
 Service Type: NodePort
 name: my-pihole-dns-udp
-labels:
-app: pihole
-chart: pihole-2.22.0
-release: my-pihole
-heritage: Helm
-UDP:
-Dynamic 30000-32767,53:dns-udp
-TCP:
-Dynamic 30000-32767,54:54
 ])
-my-pihole-dns-udp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-dns-udp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-web([
+my-pihole-dns-udp-service <-->my-pihole-pod-0-proxy
+my-pihole-dns-udp-service <-->my-pihole-pod-1-proxy
+my-pihole-web-service([
 Service Type: ClusterIP
 name: my-pihole-web
-labels:
-app: pihole
-chart: pihole-2.22.0
-release: my-pihole
-heritage: Helm
-TCP:
-8080:http
-UDP:
-53:dns-udp
 ])
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
+my-pihole-web-service <-->my-pihole-pod-0-proxy
+my-pihole-web-service <-->my-pihole-pod-1-proxy
 subgraph KubernetesAPI [KubernetesAPI
 ]
 my-pihole-password[/
+Secret
 name: my-pihole-password
-labels:
-app: pihole
-heritage: Helm
-release: my-piholeV2
-updated: true
-Data:
-password: NewPassword=
-type: Opaque
 /]
-my-pihole-custom-dnsmasq[\
-name: my-pihole-custom-dnsmasq
-labels:
-app: pihole
-chart: pihole-2.22.0
-release: my-piholeV2
-heritage: Helm
-data:
-02-custom.conf: addn-hosts=/etc/addn-hosts
-addn-hosts: 
-05-pihole-custom-cname.conf: 
-immutable: false
-\]
+password[/
+Secret
+name: password
+/]
 end
 ```
