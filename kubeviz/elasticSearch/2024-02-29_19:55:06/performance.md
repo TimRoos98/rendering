@@ -59,11 +59,11 @@ elasticsearch-master-elasticsearch-master-pvc[(
 elasticsearch-master
 Resources:
 requests:
-storage: 30Gi
+storage: 20Gi
 )]
 
-elasticsearch-master-old-pvc[(
-old
+elasticsearch-master-new-pvc[(
+new
 Resources:
 requests:
 storage: 10Gi
@@ -85,7 +85,7 @@ elasticsearch-master-pod-0-elasticsearch(
 elasticsearch
 Image: docker.elastic.co/elasticsearch/elasticsearch:8.5.1
 Resources: &#40request/limits&#41
-cpu: 1000m/1000m
+cpu: 2000m/2000m
 memory: 2Gi/2Gi)
 elasticsearch-master-pod-0-proxy{"Ingress
 Egress
@@ -98,7 +98,7 @@ elasticsearch-master-elasticsearch-master-pvc <-. "/usr/share/elasticsearch/data
 
 elasticsearch-master-pod-0-elasticsearch-certs -. "/usr/share/elasticsearch/config/certs" .-> elasticsearch-master-pod-0-elasticsearch
 
-elasticsearch-master-old-pvc <-. "/usr/share/elasticsearch/data" .-> elasticsearch-master-pod-0-elasticsearch
+elasticsearch-master-new-pvc <-. "/usr/share/elasticsearch/data" .-> elasticsearch-master-pod-0-elasticsearch
 end
 subgraph elasticsearch-master-pod-1 [Pod: elasticsearch-master-pod-1
 ]
@@ -111,7 +111,7 @@ elasticsearch-master-pod-1-elasticsearch(
 elasticsearch
 Image: docker.elastic.co/elasticsearch/elasticsearch:8.5.1
 Resources: &#40request/limits&#41
-cpu: 1000m/1000m
+cpu: 2000m/2000m
 memory: 2Gi/2Gi)
 elasticsearch-master-pod-1-proxy{"Ingress
 Egress
@@ -124,33 +124,7 @@ elasticsearch-master-elasticsearch-master-pvc <-. "/usr/share/elasticsearch/data
 
 elasticsearch-master-pod-1-elasticsearch-certs -. "/usr/share/elasticsearch/config/certs" .-> elasticsearch-master-pod-1-elasticsearch
 
-elasticsearch-master-old-pvc <-. "/usr/share/elasticsearch/data" .-> elasticsearch-master-pod-1-elasticsearch
-end
-subgraph elasticsearch-master-pod-2 [Pod: elasticsearch-master-pod-2
-]
-direction BT
-subgraph config-elasticsearch-master-pod-2 [CONFIG:
-name: pod-2
-]
-end
-elasticsearch-master-pod-2-elasticsearch(
-elasticsearch
-Image: docker.elastic.co/elasticsearch/elasticsearch:8.5.1
-Resources: &#40request/limits&#41
-cpu: 1000m/1000m
-memory: 2Gi/2Gi)
-elasticsearch-master-pod-2-proxy{"Ingress
-Egress
-"}
-elasticsearch-master-pod-2-elasticsearch <-->elasticsearch-master-pod-2-proxy
-elasticsearch-master-pod-2-elasticsearch-certs[/
-Type: Secret
- secretName: elasticsearch-master-certs/]
-elasticsearch-master-elasticsearch-master-pvc <-. "/usr/share/elasticsearch/data" .-> elasticsearch-master-pod-2-elasticsearch
-
-elasticsearch-master-pod-2-elasticsearch-certs -. "/usr/share/elasticsearch/config/certs" .-> elasticsearch-master-pod-2-elasticsearch
-
-elasticsearch-master-old-pvc <-. "/usr/share/elasticsearch/data" .-> elasticsearch-master-pod-2-elasticsearch
+elasticsearch-master-new-pvc <-. "/usr/share/elasticsearch/data" .-> elasticsearch-master-pod-1-elasticsearch
 end
 end
 elasticsearch-master-service([
@@ -159,14 +133,12 @@ name: elasticsearch-master
 ])
 elasticsearch-master-service <-->elasticsearch-master-pod-0-proxy
 elasticsearch-master-service <-->elasticsearch-master-pod-1-proxy
-elasticsearch-master-service <-->elasticsearch-master-pod-2-proxy
 elasticsearch-master-headless-service([
 Service Type: ClusterIP
 name: elasticsearch-master-headless
 ])
 elasticsearch-master-headless-service <-->elasticsearch-master-pod-0-proxy
 elasticsearch-master-headless-service <-->elasticsearch-master-pod-1-proxy
-elasticsearch-master-headless-service <-->elasticsearch-master-pod-2-proxy
 subgraph KubernetesAPI [KubernetesAPI
 ]
 elasticsearch-master-certs[/

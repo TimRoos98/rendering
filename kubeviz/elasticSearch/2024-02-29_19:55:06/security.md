@@ -36,14 +36,16 @@ subgraph elasticsearch-idfkd-test [Pod: elasticsearch-idfkd-test
 direction BT
 subgraph config-elasticsearch-idfkd-test [CONFIG:
 name: elasticsearch-idfkd-test
+Security Context: fsGroup: 1000
+runAsUser: 1000
+
+AutomountServiceAccountToken: true
 ]
 end
 elasticsearch-idfkd-test-elasticsearch-gqozy-test(
 elasticsearch-gqozy-test
 Image: docker.elastic.co/elasticsearch/elasticsearch:8.5.1
-Resources: &#40request/limits&#41
-cpu: Default/Default
-memory: Default/Default)
+)
 elasticsearch-idfkd-test-proxy{"Ingress
 Egress
 "}
@@ -57,36 +59,32 @@ subgraph elasticsearch-master [StatefulSet: elasticsearch-master]
 subgraph elasticsearch-master-pvc [Volume Claims:]
 elasticsearch-master-elasticsearch-master-pvc[(
 elasticsearch-master
-Resources:
-requests:
-storage: 30Gi
+accessModes: ReadWriteMany
 )]
 
-elasticsearch-master-old-pvc[(
-old
-Resources:
-requests:
-storage: 10Gi
+elasticsearch-master-new-pvc[(
+new
+accessModes: ReadWriteMany
 )]
 end
 subgraph elasticsearch-master-config [Config:
-PodDisruptionBudget:
-maxUnavailable: 1
 ]
 end
-subgraph elasticsearch-master-pod-0 [Pod: elasticsearch-master-pod-0
-]
+subgraph elasticsearch-master-pod-0 [Pod: elasticsearch-master-pod]
 direction BT
 subgraph config-elasticsearch-master-pod-0 [CONFIG:
 name: pod-0
+Security Context: fsGroup: 1000
+runAsUser: 1000
+
+AutomountServiceAccountToken: true
 ]
 end
 elasticsearch-master-pod-0-elasticsearch(
 elasticsearch
 Image: docker.elastic.co/elasticsearch/elasticsearch:8.5.1
-Resources: &#40request/limits&#41
-cpu: 1000m/1000m
-memory: 2Gi/2Gi)
+TCP: http:9200, transport:9300
+)
 elasticsearch-master-pod-0-proxy{"Ingress
 Egress
 "}
@@ -98,59 +96,7 @@ elasticsearch-master-elasticsearch-master-pvc <-. "/usr/share/elasticsearch/data
 
 elasticsearch-master-pod-0-elasticsearch-certs -. "/usr/share/elasticsearch/config/certs" .-> elasticsearch-master-pod-0-elasticsearch
 
-elasticsearch-master-old-pvc <-. "/usr/share/elasticsearch/data" .-> elasticsearch-master-pod-0-elasticsearch
-end
-subgraph elasticsearch-master-pod-1 [Pod: elasticsearch-master-pod-1
-]
-direction BT
-subgraph config-elasticsearch-master-pod-1 [CONFIG:
-name: pod-1
-]
-end
-elasticsearch-master-pod-1-elasticsearch(
-elasticsearch
-Image: docker.elastic.co/elasticsearch/elasticsearch:8.5.1
-Resources: &#40request/limits&#41
-cpu: 1000m/1000m
-memory: 2Gi/2Gi)
-elasticsearch-master-pod-1-proxy{"Ingress
-Egress
-"}
-elasticsearch-master-pod-1-elasticsearch <-->elasticsearch-master-pod-1-proxy
-elasticsearch-master-pod-1-elasticsearch-certs[/
-Type: Secret
- secretName: elasticsearch-master-certs/]
-elasticsearch-master-elasticsearch-master-pvc <-. "/usr/share/elasticsearch/data" .-> elasticsearch-master-pod-1-elasticsearch
-
-elasticsearch-master-pod-1-elasticsearch-certs -. "/usr/share/elasticsearch/config/certs" .-> elasticsearch-master-pod-1-elasticsearch
-
-elasticsearch-master-old-pvc <-. "/usr/share/elasticsearch/data" .-> elasticsearch-master-pod-1-elasticsearch
-end
-subgraph elasticsearch-master-pod-2 [Pod: elasticsearch-master-pod-2
-]
-direction BT
-subgraph config-elasticsearch-master-pod-2 [CONFIG:
-name: pod-2
-]
-end
-elasticsearch-master-pod-2-elasticsearch(
-elasticsearch
-Image: docker.elastic.co/elasticsearch/elasticsearch:8.5.1
-Resources: &#40request/limits&#41
-cpu: 1000m/1000m
-memory: 2Gi/2Gi)
-elasticsearch-master-pod-2-proxy{"Ingress
-Egress
-"}
-elasticsearch-master-pod-2-elasticsearch <-->elasticsearch-master-pod-2-proxy
-elasticsearch-master-pod-2-elasticsearch-certs[/
-Type: Secret
- secretName: elasticsearch-master-certs/]
-elasticsearch-master-elasticsearch-master-pvc <-. "/usr/share/elasticsearch/data" .-> elasticsearch-master-pod-2-elasticsearch
-
-elasticsearch-master-pod-2-elasticsearch-certs -. "/usr/share/elasticsearch/config/certs" .-> elasticsearch-master-pod-2-elasticsearch
-
-elasticsearch-master-old-pvc <-. "/usr/share/elasticsearch/data" .-> elasticsearch-master-pod-2-elasticsearch
+elasticsearch-master-new-pvc <-. "/usr/share/elasticsearch/data" .-> elasticsearch-master-pod-0-elasticsearch
 end
 end
 elasticsearch-master-service([
@@ -158,24 +104,29 @@ Service Type: ClusterIP
 name: elasticsearch-master
 ])
 elasticsearch-master-service <-->elasticsearch-master-pod-0-proxy
-elasticsearch-master-service <-->elasticsearch-master-pod-1-proxy
-elasticsearch-master-service <-->elasticsearch-master-pod-2-proxy
 elasticsearch-master-headless-service([
 Service Type: ClusterIP
 name: elasticsearch-master-headless
 ])
 elasticsearch-master-headless-service <-->elasticsearch-master-pod-0-proxy
-elasticsearch-master-headless-service <-->elasticsearch-master-pod-1-proxy
-elasticsearch-master-headless-service <-->elasticsearch-master-pod-2-proxy
 subgraph KubernetesAPI [KubernetesAPI
 ]
 elasticsearch-master-certs[/
 Secret
 name: elasticsearch-master-certs
+Data:
+tls.crt: LS0tLS1CRUdJTiBDR...
+tls.key: LS0tLS1CRUdJTiBSU...
+ca.crt: LS0tLS1CRUdJTiBDR...
+type: TLS
 /]
 elasticsearch-master-credentials[/
 Secret
 name: elasticsearch-master-credentials
+Data:
+username: ZWxhc3RpYw==
+password: YmNsTEMxOGtKcXdWM...
+type: Opaque
 /]
 end
 ```
