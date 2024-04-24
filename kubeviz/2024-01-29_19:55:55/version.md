@@ -1,107 +1,156 @@
 ```mermaid
 flowchart
-subgraph Legend
-    direction LR
-
-    start1[ ] -->|Network Flow| stop1[ ]
-    style start1 height:0px;
-    style stop1 height:0px;
-    start2[ ] -.->|Storage Flow| stop2[ ]
-    style start2 height:0px;
-    style stop2 height:0px; 
-    subgraph KubernetesAPILegend
-        direction LR
-        ParallelogramAlt[\ ConfigMap \]
-        Parallelogram[/ Secret /]
-    end
-    subgraph Deployment
-        direction LR
-        subgraph DeploymentConfig[Deployment Specific Config]
-        end
-        Proxy2{Ingress
-         Egress}
-        subgraph Pod
-        direction LR
-        subgraph PodConfig[Pod Specific Config]
-        end
-        Proxy{Ingress
-         Egress}
-        Container(Container)
-        Storage[( Storage )]
-        end
-    end    
-    Stadium([ Service ])
-      
-DELETED[ Deleted Resource ]:::DELETED
-    NEW[ New Resource ]:::NEW
-    Updated[ Updated Resource 
-    Value: <span style='color: red;'>Old Value</span> <span style='color: green;'>New Value</span>]:::UPDATED
-    EQUAL[ Unchanged Resource ]
-    end
-external["External Network"]
-external --nodeIP:UDP-Dynamic 30000-32767 --> my-pihole-dhcp
-external --nodeIP:UDP-Dynamic 30000-32767 TCP-Dynamic 30000-32767 --> my-pihole-dns-udp
+external[["External Network"]]
+external --> my-pihole-dhcp-service
+external --> my-pihole-dns-udp-service
 subgraph KubernetesAPI [KubernetesAPI]
 my-pihole-password[/
 Name: my-pihole-password
 Labels:
 app: pihole
 heritage: Helm
-<span style='color: orange;'>release: my-piholeV2
-</span><span style='color: green;'>updated: true
-</span><span style='color: red;'>chart: pihole-2.22.0
+release: my-pihole
+<span style='color: blue;'>chart: pihole-2.22.3
 </span>Data:
-<span style='color: orange;'>password: NewPassword=
+<span style='color: blue;'>login: Wajo
+</span><span style='color: green;'>test: lol
+</span><span style='color: red;'>password: YWRtaW4=
+</span>StringData:
+<span style='color: green;'>hello: hello
 </span>/]:::UPDATED
+password[/
+Secret
+name: password
+labels:
+app: pihole
+heritage: Helm
+release: my-piholeV2
+updated: true
+Data:
+password: NewPassword=
+type: Opaque
+/]:::DELETED
 my-pihole-custom-dnsmasq[\
-Name: my-pihole-custom-dnsmasq
-Labels:
+ConfigMap
+name: my-pihole-custom-dnsmasq
+labels:
 app: pihole
 chart: pihole-2.22.0
+release: my-pihole
 heritage: Helm
-<span style='color: orange;'>release: my-piholeV2
-</span>\]:::UPDATED
+data:
+02-custom.conf: addn-hosts=/etc/a...
+addn-hosts: 
+05-pihole-custom-cname.conf: 
+immutable: false
+\]:::NEW
 end
 KubernetesAPI:::UPDATED
 subgraph my-pihole-smoke-test [Pod: my-pihole-smoke-test
 ]
 direction BT
 subgraph config-my-pihole-smoke-test [CONFIG:
-RestartPolicy: <span style='color: red;'>Never</span> <span style='color: green;'>OnFailure</span>
-Termination Grace Period: <span style='color: red;'>0</span> <span style='color: green;'>20</span>
+RestartPolicy: <span style='color: red;'>Never</span> <span style='color: green;'>Always</span>
 ]
 end
 config-my-pihole-smoke-test:::UPDATED
 my-pihole-smoke-test-hook1-container(
 hook1-container
-Image: <span style='color: red;'>curlimages/curl</span> <span style='color: green;'>curlimages/curlV2</span>
-Commands: sh, <span style='color: red;'>-c</span>, curl http://my-pihole-web:80/, <span style='color: green;'>somethingTestV2</span>
-ImagePullPolicy: <span style='color: red;'>IfNotPresent</span> <span style='color: green;'>Always</span>
+Image: <span style='color: red;'>curlimages/curlv2</span> <span style='color: green;'>curlimages/curl</span>
+Commands: sh, <span style='color: red;'>-c</span>, <span style='color: red;'>curl http://my-pihole-web:80/</span>, <span style='color: green;'>curl http://my-pihole-web:90/</span>, <span style='color: green;'>p00</span>
 ):::UPDATED
+my-pihole-smoke-test-data-container(
+data-container
+Image: curlimages/curlv1
+Resources: &#40request/limits&#41
+cpu: Default/Default
+memory: Default/Default
+Image Pull Policy: IfNotPresent
+):::NEW
 my-pihole-smoke-test-proxy{"Ingress
 Egress
 "}
 my-pihole-smoke-test-hook1-container --> my-pihole-smoke-test-proxy
+my-pihole-smoke-test-data-container --> my-pihole-smoke-test-proxy
 end
 my-pihole-smoke-test:::UPDATED
+subgraph new-bla [Pod: new-bla
+]
+direction BT
+subgraph config-new-bla [CONFIG:
+name: new-bla
+DNSPolicy: Default
+NameServers: 
+HostNetwork: true
+Restart Policy: Never
+Termination Grace Period: 0S
+]
+end
+new-bla-hook1-container(
+hook1-container
+Image: curlimages/curlv2
+Resources: &#40request/limits&#41
+cpu: Default/Default
+memory: Default/DefaultCommands: sh, -c, curl http://my-pihole-web:80/
+Image Pull Policy: IfNotPresent
+)
+new-bla-proxy{"Ingress
+Egress
+"}
+new-bla-hook1-container --> new-bla-proxy
+end
+new-bla:::NEW
+
+subgraph my-pihole-old-blablabla [Pod: my-pihole-old-blablabla
+]
+direction BT
+subgraph config-my-pihole-old-blablabla [CONFIG:
+name: my-pihole-old-blablabla
+DNSPolicy: Default
+NameServers: 
+HostNetwork: true
+Restart Policy: Never
+Termination Grace Period: 0S
+]
+end
+my-pihole-old-blablabla-hook1-container(
+hook1-container
+Image: curlimages/curlv2
+Resources: &#40request/limits&#41
+cpu: Default/Default
+memory: Default/DefaultCommands: sh, -c, curl http://my-pihole-web:80/
+Image Pull Policy: IfNotPresent
+)
+my-pihole-old-blablabla-proxy{"Ingress
+Egress
+"}
+my-pihole-old-blablabla-hook1-container --> my-pihole-old-blablabla-proxy
+end
+my-pihole-old-blablabla:::DELETED
+
 subgraph my-pihole [Deployment: my-pihole]
 subgraph my-pihole-config [Config:
 StrategyType: <span style='color: red;'>RollingUpdate</span> <span style='color: green;'>Recreate</span>
-]
+recreate:
+<span style='color: red;'>maxSurge: 1
+maxUnavailable: 1
+</span>]
 end
-subgraph my-pihole-pod-0 [Pod: my-pihole-pod-0
+subgraph my-pihole-pod-0 [Pod: my-pihole-pod
+
 ]
 direction BT
 subgraph config-my-pihole-pod-0 [CONFIG:
-NameServers: <span style='color: red;'>127.0.0.1</span>, <span style='color: green;'>0.0.0.0</span>, 8.8.8.8
 ]
 end
-config-my-pihole-pod-0:::UPDATED
-pod-0-pihole(
+my-pihole-pod-0-pihole(
 pihole
-Resources: &#40request/limits&#41
-CPU: Default/<span style='color: red;'>Default</span>,<span style='color: green;'>1Gi</span>
-Memory: <span style='color: red;'>Default</span>,<span style='color: green;'>500m</span>/<span style='color: red;'>Default</span>,<span style='color: green;'>1100m</span>
+Env: WEBPASSWORD: my-pihole-passwor...
+PIHOLE_DNS_: 8.8.8.8;8.8.4.4
+<span style='color: blue;'>VIRTUAL_HOST: hey
+</span><span style='color: green;'>VIRTUAL: new
+</span><span style='color: red;'>WEB_PORT: 80
+</span>ImagePullPolicy: <span style='color: red;'>IfNotPresent</span> <span style='color: green;'>Always</span>
 ):::UPDATED
 my-pihole-pod-0-proxy{"Ingress
 Egress
@@ -114,126 +163,107 @@ client-udp: 67
 readinessProbe: HTTP GET /admin/index.php:http
 livenessProbe: HTTP GET /admin/index.php:http
 -->my-pihole-pod-0-proxy
-my-pihole-pod-0-config[("config
-Type: EmptyDir
-")]
 my-pihole-pod-0-custom-dnsmasq[("custom-dnsmasq
 Type: ConfigMap
 ")]
-my-pihole-pod-0-config <-.-> my-pihole-pod-0-pihole
+my-pihole-pod-0-configNew[("configNew
+type: emptyDir
+")]
+my-pihole-pod-0-configNew:::NEW
+
+my-pihole-pod-0-config[("config
+type: emptyDir
+")]
+my-pihole-pod-0-config:::DELETED
 
 my-pihole-pod-0-custom-dnsmasq <-.-> my-pihole-pod-0-pihole
 
 my-pihole-pod-0-custom-dnsmasq <-.-> my-pihole-pod-0-pihole
+
+my-pihole-pod-0-configNew <-.-> my-pihole-pod-0-pihole
 end
 my-pihole-pod-0:::UPDATED
-subgraph my-pihole-pod-1 [Pod: my-pihole-pod-1
-]
-direction BT
-subgraph config-my-pihole-pod-1 [CONFIG:
-NameServers: <span style='color: red;'>127.0.0.1</span>, <span style='color: green;'>0.0.0.0</span>, 8.8.8.8
-]
-end
-config-my-pihole-pod-1:::UPDATED
-pod-1-pihole(
-pihole
-Resources: &#40request/limits&#41
-CPU: Default/<span style='color: red;'>Default</span>,<span style='color: green;'>1Gi</span>
-Memory: <span style='color: red;'>Default</span>,<span style='color: green;'>500m</span>/<span style='color: red;'>Default</span>,<span style='color: green;'>1100m</span>
-):::UPDATED
-my-pihole-pod-1-proxy{"Ingress
-Egress
-"}
-my-pihole-pod-1-pihole <--http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67
-readinessProbe: HTTP GET /admin/index.php:http
-livenessProbe: HTTP GET /admin/index.php:http
--->my-pihole-pod-1-proxy
-my-pihole-pod-1-config[("config
-Type: EmptyDir
-")]
-my-pihole-pod-1-custom-dnsmasq[("custom-dnsmasq
-Type: ConfigMap
-")]
-my-pihole-pod-1-config <-.-> my-pihole-pod-1-pihole
-
-my-pihole-pod-1-custom-dnsmasq <-.-> my-pihole-pod-1-pihole
-
-my-pihole-pod-1-custom-dnsmasq <-.-> my-pihole-pod-1-pihole
-end
-my-pihole-pod-1:::UPDATED
 end
 my-pihole:::UPDATED
-my-pihole-dhcp([
+my-pihole-dhcp-service([
 Service Type: NodePort
 Name: my-pihole-dhcp
-PortMapping:
+Labels:
+app: pihole
+<span style='color: blue;'>chart: pihole-2.22.3
+release: my-pihole-new
+</span><span style='color: green;'>heritageNew: Helm
+</span><span style='color: red;'>heritage: Helm
+</span>PortMapping:
 UDP: <span style='color: red;'>Dynamic 30000-32767,67:client-udp
-</span>, <span style='color: green;'>Dynamic 30000-32767,68:client-udp
+</span>, <span style='color: green;'>Dynamic 30000-32767,88:client-udp
 </span>
 ]):::UPDATED
-my-pihole-dhcp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-dhcp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-dns-udp([
+my-pihole-dhcp-service <-->my-pihole-pod-0-proxy
+my-pihole-dns-udp-service([
 Service Type: NodePort
 Name: my-pihole-dns-udp
-PortMapping:
-UDP: Dynamic 30000-32767,53:dns-udp
-
-<span style='color: green;'>TCP: Dynamic 30000-32767,54:54
-
-</span>]):::UPDATED
-my-pihole-dns-udp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-dns-udp --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-web([
+])
+my-pihole-dns-udp-service <-->my-pihole-pod-0-proxy
+web-service-for-piere-service([
 Service Type: ClusterIP
-Name: my-pihole-web
-PortMapping:
-TCP: <span style='color: red;'>80:http
-</span>, <span style='color: red;'>443:https
-</span>, <span style='color: green;'>8080:http
-</span>
-<span style='color: green;'>UDP: 53:dns-udp
+name: web-service-for-piere
+TCP:
+80:http
+443:https
+])
+web-service-for-piere-service <-->my-pihole-pod-0-proxy
+web-service-for-piere-service:::NEW
 
-</span>]):::UPDATED
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-0-proxy
-my-pihole-web --http: 80
-dns: 53
-dns-udp: 53
-https: 443
-client-udp: 67--> my-pihole-pod-1-proxy
-my-pihole-pod-0-proxy --UDP-68 --> my-pihole-dhcp
-my-pihole-pod-1-proxy --UDP-68 --> my-pihole-dhcp
-my-pihole-smoke-test-proxy --UDP-68 --> my-pihole-dhcp
-my-pihole-pod-0-proxy --UDP-53 TCP-54 --> my-pihole-dns-udp
-my-pihole-pod-1-proxy --UDP-53 TCP-54 --> my-pihole-dns-udp
-my-pihole-smoke-test-proxy --UDP-53 TCP-54 --> my-pihole-dns-udp
-my-pihole-pod-0-proxy --TCP-8080 UDP-53 --> my-pihole-web
-my-pihole-pod-1-proxy --TCP-8080 UDP-53 --> my-pihole-web
-my-pihole-smoke-test-proxy --TCP-8080 UDP-53 --> my-pihole-web
+my-pihole-web-service([
+Service Type: ClusterIP
+name: my-pihole-web
+])
+my-pihole-web-service:::DELETED
+
+my-pihole-smoke-test-proxy --> my-pihole-dhcp-service
+new-bla-proxy --> my-pihole-dhcp-service
+my-pihole-smoke-test-proxy --> my-pihole-dns-udp-service
+new-bla-proxy --> my-pihole-dns-udp-service
+my-pihole-smoke-test-proxy --> web-service-for-piere-service
+new-bla-proxy --> web-service-for-piere-service
+subgraph Legend
+    direction LR
+
+    start1[ ] -->|Network Flow| stop1[ ]
+    style start1 height:0px;
+    style stop1 height:0px;
+    start2[ ] -.->|Storage Flow| stop2[ ]
+    style start2 height:0px;
+    style stop2 height:0px; 
+    externalLegend[["External Network"]]
+    subgraph KubernetesAPILegend
+        direction LR
+        Parallelogram[/ Secret /]
+        ParallelogramAlt[\ ConfigMap \]
+    end
+    subgraph Deployment
+        direction LR
+        subgraph rootConfig[Deployment Specific Config]
+        end
+        subgraph Pod
+        direction LR
+        subgraph PodConfig[Pod Specific Config]
+        end
+        Proxy{Ingress
+         Egress}
+        Container(Container)
+        Storage[( Storage )]
+        end
+    end
+    Stadium([ Service ])
+    DELETED[ Deleted Resource ]:::DELETED
+    NEW[ New Resource ]:::NEW
+    Updated[ Updated Resource 
+    Value: <span style='color: red;'>Old Value</span> <span style='color: green;'>New Value</span>]:::UPDATED
+    EQUAL[ Unchanged Resource ]
+    end
 classDef DELETED stroke:#f00
 classDef NEW stroke:#0f0
-classDef UPDATED stroke:#00f```
+classDef UPDATED stroke:#00f
+```
