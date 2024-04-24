@@ -149,4 +149,5 @@ subgraph Legend
     end
 classDef DELETED stroke:#f00
 classDef NEW stroke:#0f0
-classDef UPDATED stroke:#00f```
+classDef UPDATED stroke:#00f
+```
