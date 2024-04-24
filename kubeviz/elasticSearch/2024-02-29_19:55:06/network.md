@@ -133,4 +133,5 @@ Secret
 name: elasticsearch-master-credentials
 /]
 end
+
 ```
