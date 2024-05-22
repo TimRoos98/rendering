@@ -121,14 +121,6 @@ spec:
         resources:
           requests:
             storage: 30Gi
-    - metadata:
-        name: old
-      spec:
-        accessModes:
-          - ReadWriteMany
-        resources:
-          requests:
-            storage: 10Gi
   template:
     metadata:
       name: "elasticsearch-master"
@@ -299,14 +291,14 @@ spec:
               value: "/usr/share/elasticsearch/config/certs/tls.key"
             - name: xpack.security.http.ssl.certificate
               value: "/usr/share/elasticsearch/config/certs/tls.crt"
+            - name: xpack.security.http.ssl.certificate_authorities
+              value: "/usr/share/elasticsearch/config/certs/ca.crt"
           volumeMounts:
             - name: "elasticsearch-master"
               mountPath: /usr/share/elasticsearch/data
             - name: elasticsearch-certs
               mountPath: /usr/share/elasticsearch/config/certs
               readOnly: true
-            - name: "old"
-              mountPath: /usr/share/elasticsearch/data
 ---
 # Source: elasticsearch/templates/test/test-elasticsearch-health.yaml
 apiVersion: v1
