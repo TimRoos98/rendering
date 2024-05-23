@@ -58,7 +58,7 @@ Resources: &#40request/limits&#41
 cpu: Default/Default
 memory: Default/DefaultEnv: ELASTIC_PASSWORD: elasticsearch-mas...
 Commands: sh, -c, #!/usr/bin/env bash -e
-curl -XGET --fail --cacert /usr/share/elasticsearch/config/certs/tls.crt -u "elastic:${ELASTIC_PASSWORD}" https://'elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s'
+curl -XGET --fail --cacert /usr/share/elasticsearch/config/certs/tls.crt -u elastic:ELASTIC_PASSWORD https://'elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s'
 Image Pull Policy: IfNotPresent
 )
 elasticsearch-new-proxy{"Ingress
@@ -74,7 +74,7 @@ elasticsearch-new:::NEW
 
 subgraph elasticsearch-master [StatefulSet: elasticsearch-master]
 subgraph elasticsearch-master-config [Config:
-"podManagementPolicy: <span style='color: blue;'>OrderedReady</span>"]
+podManagementPolicy: <span style='color: blue;'>OrderedReady</span>]
 end
 subgraph elasticsearch-master-pvc [Volume Claims:]
 elasticsearch-master-newVolume-pvc[(
