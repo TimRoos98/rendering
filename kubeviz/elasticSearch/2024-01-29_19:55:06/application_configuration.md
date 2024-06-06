@@ -48,7 +48,7 @@ elasticsearch-gqozy-test
 Image: docker.elastic.co/elasticsearch/elasticsearch:8.5.1
 Env: ELASTIC_PASSWORD: elasticsearch-mas...
 Commands: sh, -c, #!/usr/bin/env bash -e
-curl -XGET --fail --cacert /usr/share/elasticsearch/config/certs/tls.crt -u &quotelastic:$&#123ELASTIC_PASSWORD&#125&quot https://'elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s'
+'elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s'
 Image Pull Policy: IfNotPresent
 )
 elasticsearch-idfkd-test-proxy{"Ingress
